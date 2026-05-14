@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fugth Management — AI That Sounds Like a Human</title>
+  <meta name="description" content="Fugth Management's AI handles your calls, emails, and leads — responding like your most trusted employee, 24 hours a day. Never miss a customer again." />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fafafa;
+      --white: #ffffff;
+      --black: #0f0f0f;
+      --zinc-50: #fafafa;
+      --zinc-100: #f4f4f5;
+      --zinc-200: #e4e4e7;
+      --zinc-300: #d4d4d8;
+      --zinc-400: #a1a1aa;
+      --zinc-500: #71717a;
+      --zinc-600: #52525b;
+      --zinc-700: #3f3f46;
+      --zinc-800: #27272a;
+      --zinc-900: #18181b;
+      --accent: #18181b;
+      --accent-hover: #3f3f46;
+      --green: #22c55e;
+      --radius: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+      --shadow-xl: 0 20px 60px rgba(0,0,0,.14);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      scroll-behavior: smooth;
+    }
+    html { font-size: 16px; }
+    body { background: var(--bg); color: var(--zinc-900); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    img, svg { display: block; }
+    button { cursor: pointer; font-family: inherit; border: none; }
+    input, button { font-size: 14px; }
+    ul { list-style: none; }
+
+    /* ── Typography ── */
+    .text-xs   { font-size: 11px; }
+    .text-sm   { font-size: 13px; }
+    .text-base { font-size: 15px; }
+    .text-lg   { font-size: 17px; }
+    .text-xl   { font-size: 20px; }
+    .eyebrow {
+      font-size: 10px; font-weight: 600; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--zinc-400);
+    }
+    .section-title {
+      font-size: clamp(28px, 5vw, 44px); font-weight: 900;
+      letter-spacing: -.03em; line-height: 1.15; color: var(--zinc-900);
+    }
+    .section-sub { font-size: 15px; color: var(--zinc-500); line-height: 1.7; }
+
+    /* ── Layout ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section   { padding: 80px 0; }
+    .grid-2    { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .grid-3    { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-4    { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 12px 26px; border-radius: var(--radius);
+      font-weight: 600; transition: all .18s ease; white-space: nowrap;
+    }
+    .btn-primary   { background: var(--zinc-900); color: #fff; }
+    .btn-primary:hover { background: var(--zinc-700); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-outline   { border: 1.5px solid var(--zinc-300); color: var(--zinc-700); background: transparent; }
+    .btn-outline:hover { background: var(--zinc-50); border-color: var(--zinc-400); }
+    .btn-white     { background: #fff; color: var(--zinc-900); }
+    .btn-white:hover { background: var(--zinc-100); transform: translateY(-1px); }
+    .btn-lg { padding: 14px 32px; font-size: 14px; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--zinc-200); box-shadow: var(--shadow-sm);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      height: 62px; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px; shrink: 0; text-decoration: none;
+    }
+    .logo-mark {
+      width: 30px; height: 30px; background: var(--zinc-900); border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 13px; font-weight: 900; letter-spacing: -.02em;
+    }
+    .logo-name { font-weight: 800; font-size: 13px; letter-spacing: .04em; color: var(--zinc-900); }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link {
+      padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 500;
+      color: var(--zinc-600); transition: all .15s; cursor: pointer;
+    }
+    .nav-link:hover, .nav-link.active { background: var(--zinc-100); color: var(--zinc-900); }
+    .nav-link.active { background: var(--zinc-900); color: #fff; }
+    .nav-cta { display: flex; align-items: center; gap: 10px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { width: 22px; height: 2px; background: var(--zinc-700); border-radius: 2px; transition: all .25s; }
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 4px; padding: 12px 16px;
+      border-bottom: 1px solid var(--zinc-200); background: #fff;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-link {
+      padding: 10px 12px; border-radius: 8px; font-size: 14px; font-weight: 500;
+      color: var(--zinc-700); transition: background .15s;
+    }
+    .mobile-link:hover { background: var(--zinc-100); }
+
+    /* ── HERO ── */
+    .hero { background: var(--white); border-bottom: 1px solid var(--zinc-200); padding: 96px 0 80px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 999px; border: 1px solid var(--zinc-200);
+      background: var(--zinc-100); font-size: 11px; font-weight: 600;
+      color: var(--zinc-600); letter-spacing: .05em; margin-bottom: 28px;
+    }
+    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--zinc-900); }
+    .hero-title {
+      font-size: clamp(40px, 7vw, 68px); font-weight: 900;
+      letter-spacing: -.04em; line-height: 1.08; color: var(--zinc-900); margin-bottom: 22px;
+    }
+    .hero-title .muted { color: var(--zinc-400); }
+    .hero-sub { font-size: 16px; color: var(--zinc-500); line-height: 1.75; max-width: 440px; margin-bottom: 36px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .hero-note { font-size: 11px; color: var(--zinc-400); }
+
+    /* Chat mock */
+    .chat-card {
+      background: var(--zinc-50); border: 1px solid var(--zinc-200);
+      border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-md);
+    }
+    .chat-header {
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid var(--zinc-200); padding-bottom: 14px; margin-bottom: 16px;
+    }
+    .chat-avatar {
+      width: 38px; height: 38px; border-radius: 50%; background: var(--zinc-900);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 11px; font-weight: 700; shrink: 0;
+    }
+    .chat-name { font-size: 13px; font-weight: 700; color: var(--zinc-900); }
+    .chat-status { font-size: 11px; color: var(--zinc-400); }
+    .online-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: auto; }
+    .chat-messages { display: flex; flex-direction: column; gap: 10px; }
+    .msg { display: flex; max-width: 82%; }
+    .msg.caller { margin-left: auto; }
+    .msg-bubble {
+      padding: 10px 14px; border-radius: 14px; font-size: 12.5px; line-height: 1.55;
+    }
+    .msg.ai .msg-bubble    { background: var(--zinc-900); color: #fff; border-bottom-left-radius: 4px; }
+    .msg.caller .msg-bubble { background: var(--zinc-200); color: var(--zinc-800); border-bottom-right-radius: 4px; }
+    .chat-footer { margin-top: 14px; text-align: center; font-size: 10px; color: var(--zinc-400); }
+
+    /* ── PROOF STRIP ── */
+    .proof-strip {
+      background: var(--zinc-900); padding: 16px 0;
+      display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap;
+    }
+    .proof-item { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--zinc-500); }
+
+    /* ── FEATURES ── */
+    .features { background: var(--white); border-bottom: 1px solid var(--zinc-200); }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .eyebrow { margin-bottom: 10px; }
+    .section-header .section-title { margin-bottom: 14px; }
+    .feature-card {
+      background: var(--zinc-50); border: 1px solid var(--zinc-200); border-radius: var(--radius-lg);
+      padding: 24px; transition: all .2s; cursor: default;
+    }
+    .feature-card:hover { box-shadow: var(--shadow-md); border-color: var(--zinc-300); transform: translateY(-2px); }
+    .feature-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .feature-icon { font-size: 24px; }
+    .feature-badge {
+      padding: 3px 9px; background: var(--zinc-900); color: #fff;
+      font-size: 9px; font-weight: 700; border-radius: 99px; text-transform: uppercase; letter-spacing: .08em;
+    }
+    .feature-title { font-size: 14px; font-weight: 700; color: var(--zinc-900); margin-bottom: 8px; }
+    .feature-desc  { font-size: 13px; color: var(--zinc-500); line-height: 1.65; }
+
+      <meta http-equiv="refresh" content="0; url=./fugthmanagement.html" />
+      <script>
+        window.location.replace("./fugthmanagement.html");
+      </script>
+      <style>
+        /* ── Reset & Base ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+          background: var(--bg);
+          color: var(--zinc-900);
+          line-height: 1.6;
+          -webkit-font-smoothing: antialiased;
+        }
+      </style>
+    .service-card {
+      background: var(--white); border: 1px solid var(--zinc-200); border-radius: var(--radius-lg);
+        <p>Redirecting to Fugth Management...</p>
+      </body>
+    </html>
+    .email-subject { font-size: 13px; font-weight: 700; color: var(--zinc-900); margin-bottom: 12px; }
+    .email-divider { border: none; border-top: 1px solid var(--zinc-200); margin: 12px 0; }
+    .email-body { font-size: 12.5px; color: var(--zinc-600); line-height: 1.75; }
+    .email-cta {
+      display: inline-block; margin-top: 12px; padding: 8px 16px;
+      background: var(--zinc-900); color: #fff; border-radius: 6px; font-size: 11px; font-weight: 600;
+    }
+    .email-mock-note { margin-top: 10px; text-align: center; font-size: 10.5px; color: var(--zinc-400); }
+
+    /* ── STATS STRIP ── */
+    .stats-strip { background: var(--zinc-900); padding: 80px 0; }
+    .stats-inner { text-align: center; }
+    .stats-eyebrow { color: var(--zinc-500); margin-bottom: 12px; }
+    .stats-title { color: #fff; margin-bottom: 10px; }
+    .stats-title .muted { color: var(--zinc-400); }
+    .stats-sub { font-size: 15px; color: var(--zinc-400); max-width: 560px; margin: 0 auto 48px; line-height: 1.7; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 680px; margin: 0 auto; }
+    .stat-card { background: var(--zinc-800); border: 1px solid var(--zinc-700); border-radius: var(--radius-lg); padding: 28px 20px; }
+    .stat-number { font-size: 42px; font-weight: 900; color: #fff; letter-spacing: -.04em; margin-bottom: 6px; }
+    .stat-label  { font-size: 12px; color: var(--zinc-400); }
+
+    /* ── PRICING ── */
+    .pricing { background: var(--white); border-bottom: 1px solid var(--zinc-200); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .price-card {
+      position: relative; border-radius: var(--radius-lg); padding: 28px 26px;
+      border: 1px solid var(--zinc-200); background: var(--zinc-50);
+      transition: box-shadow .2s;
+    }
+    .price-card:hover { box-shadow: var(--shadow-md); }
+    .price-card.highlight { background: var(--zinc-900); border-color: var(--zinc-700); box-shadow: var(--shadow-xl); }
+    .popular-badge {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      padding: 4px 14px; background: #fff; color: var(--zinc-900);
+      font-size: 9px; font-weight: 900; border-radius: 99px; border: 1px solid var(--zinc-200);
+      text-transform: uppercase; letter-spacing: .08em; white-space: nowrap;
+    }
+    .plan-name { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--zinc-500); margin-bottom: 6px; }
+    .price-card.highlight .plan-name { color: var(--zinc-400); }
+    .plan-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
+    .plan-amount { font-size: 50px; font-weight: 900; letter-spacing: -.04em; color: var(--zinc-900); }
+    .price-card.highlight .plan-amount { color: #fff; }
+    .plan-per { font-size: 13px; color: var(--zinc-400); }
+    .plan-desc { font-size: 11px; color: var(--zinc-400); margin-bottom: 20px; }
+    .plan-features { margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px; }
+    .plan-feature { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; }
+    .plan-check { color: var(--zinc-500); flex-shrink: 0; margin-top: 1px; }
+    .price-card.highlight .plan-check { color: var(--zinc-400); }
+    .plan-feature-text { color: var(--zinc-600); }
+    .price-card.highlight .plan-feature-text { color: var(--zinc-300); }
+    .plan-btn {
+      width: 100%; padding: 13px; border-radius: var(--radius); font-size: 13px; font-weight: 700;
+      transition: all .18s; background: var(--zinc-900); color: #fff;
+    }
+    .plan-btn:hover { background: var(--zinc-700); transform: translateY(-1px); }
+    .price-card.highlight .plan-btn { background: #fff; color: var(--zinc-900); }
+    .price-card.highlight .plan-btn:hover { background: var(--zinc-100); }
+
+    /* ── WAITLIST / CTA ── */
+    .cta-section { background: var(--zinc-100); padding: 80px 0; }
+    .cta-inner { max-width: 560px; margin: 0 auto; text-align: center; }
+    .cta-title { margin-bottom: 14px; }
+    .cta-sub { font-size: 15px; color: var(--zinc-500); margin-bottom: 32px; line-height: 1.7; }
+    .cta-form { display: flex; gap: 10px; max-width: 420px; margin: 0 auto; }
+    .cta-input {
+      flex: 1; padding: 12px 16px; border: 1.5px solid var(--zinc-300); border-radius: var(--radius);
+      font-size: 14px; background: #fff; outline: none; transition: border-color .15s;
+    }
+    .cta-input:focus { border-color: var(--zinc-500); }
+    .cta-success {
+      padding: 16px 24px; background: #fff; border: 1px solid var(--zinc-200);
+      border-radius: var(--radius-lg); font-size: 14px; font-weight: 600; color: var(--zinc-700);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--zinc-900); border-top: 1px solid var(--zinc-800); padding: 60px 0 32px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+    .footer-brand-name { font-size: 13px; font-weight: 800; color: #fff; letter-spacing: .04em; }
+    .footer-tagline { font-size: 12px; color: var(--zinc-500); margin-top: 8px; line-height: 1.6; }
+    .footer-col-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--zinc-500); margin-bottom: 14px; }
+    .footer-links { display: flex; flex-direction: column; gap: 9px; }
+    .footer-link { font-size: 13px; color: var(--zinc-500); transition: color .15s; }
+    .footer-link:hover { color: var(--zinc-200); }
+    .footer-bottom {
+      border-top: 1px solid var(--zinc-800); padding-top: 28px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-size: 12px; color: var(--zinc-600); }
+    .footer-badges { display: flex; gap: 12px; }
+    .footer-badge {
+      font-size: 10px; color: var(--zinc-600); border: 1px solid var(--zinc-800);
+      padding: 4px 10px; border-radius: 6px;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp .55s ease both; }
+    .delay-1 { animation-delay: .1s; }
+    .delay-2 { animation-delay: .2s; }
+    .delay-3 { animation-delay: .3s; }
+
+    /* Typing cursor animation for chat */
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .typing span { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--zinc-400); margin: 0 2px; animation: blink 1.2s infinite; }
+    .typing span:nth-child(2) { animation-delay: .2s; }
+    .typing span:nth-child(3) { animation-delay: .4s; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .grid-2  { grid-template-columns: 1fr; gap: 40px; }
+      .grid-3  { grid-template-columns: 1fr 1fr; }
+      .grid-4  { grid-template-columns: 1fr 1fr; }
+      .hero-title { font-size: 42px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .stats-grid { grid-template-columns: 1fr; max-width: 320px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .service-inner { grid-template-columns: 1fr; gap: 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .desktop-only { display: none !important; }
+    }
+    @media (max-width: 560px) {
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: 1fr 1fr; }
+      .cta-form { flex-direction: column; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; text-align: center; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .proof-strip { gap: 20px; padding: 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo">
+      <div class="logo-mark">F</div>
+      <span class="logo-name">FUGTH MANAGEMENT</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#home"       class="nav-link active" data-section="home">Home</a>
+      <a href="#features"   class="nav-link" data-section="features">Features</a>
+      <a href="#services"   class="nav-link" data-section="services">Services</a>
+      <a href="#email-leads" class="nav-link" data-section="email-leads">Email &amp; Leads</a>
+      <a href="#pricing"    class="nav-link" data-section="pricing">Pricing</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#pricing" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">See Plans</a>
+      <a href="#waitlist" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Get Started</a>
+      <div class="hamburger" id="hamburger" aria-label="Open menu" role="button" tabindex="0">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home"       class="mobile-link">Home</a>
+    <a href="#features"   class="mobile-link">Features</a>
+    <a href="#services"   class="mobile-link">Services</a>
+    <a href="#email-leads" class="mobile-link">Email &amp; Leads</a>
+    <a href="#pricing"    class="mobile-link">Pricing</a>
+    <a href="#waitlist"   class="mobile-link" style="font-weight:700;color:var(--zinc-900);margin-top:4px;">Get Started Free →</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="grid-2">
+      <div class="fade-up">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          AI That Sounds Like a Human
+        </div>
+        <h1 class="hero-title">
+          Your Business,<br>
+          <span class="muted">Always</span><br>
+          Answering.
+        </h1>
+        <p class="hero-sub">
+          Fugth Management's AI handles your calls, emails, and leads —
+          responding like your most trusted employee, 24 hours a day.
+          Never miss a customer again.
+        </p>
+        <div class="hero-actions">
+          <a href="#waitlist" class="btn btn-primary btn-lg">Get Started Free</a>
+          <a href="#features" class="btn btn-outline btn-lg">See How It Works</a>
+        </div>
+        <p class="hero-note">No credit card required &nbsp;·&nbsp; 14-day free trial</p>
+      </div>
+
+      <!-- Chat Mock -->
+      <div class="chat-card fade-up delay-2 desktop-only">
+        <div class="chat-header">
+          <div class="chat-avatar">AI</div>
+          <div>
+            <p class="chat-name">Fugth AI Assistant</p>
+            <p class="chat-status">Responding now · Online</p>
+          </div>
+          <div class="online-dot"></div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <!-- populated by JS -->
+        </div>
+        <p class="chat-footer">AI-powered · Sounds human · Books appointments</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROOF STRIP ─── -->
+<div class="proof-strip">
+  <span class="proof-item">Revenue Recovery</span>
+  <span class="proof-item">Lead Generation</span>
+  <span class="proof-item">Email Automation</span>
+  <span class="proof-item">Reputation Defense</span>
+  <span class="proof-item">24/7 AI Answering</span>
+</div>
+
+<!-- ─── FEATURES ─── -->
+<section class="features section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <p class="eyebrow">Platform Features</p>
+      <h2 class="section-title">Built to run your business<br>while you focus on it.</h2>
+      <p class="section-sub" style="max-width:500px;margin:0 auto;">
+        One platform. Every customer touchpoint — calls, emails, reviews, leads — handled automatically by AI that sounds exactly like you.
+      </p>
+    </div>
+    <div class="grid-3" id="featureGrid">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ─── SERVICES ─── -->
+<section class="services section" id="services">
+  <div class="container">
+    <div class="services-header">
+      <p class="eyebrow">Core Services</p>
+      <h2 class="section-title">Three engines.<br>One system.</h2>
+    </div>
+    <div id="serviceList"><!-- populated by JS --></div>
+  </div>
+</section>
+
+<!-- ─── EMAIL & LEADS ─── -->
+<section class="email-section section" id="email-leads">
+  <div class="container">
+    <div class="grid-2">
+      <div>
+        <p class="eyebrow" style="margin-bottom:12px;">Email &amp; Lead Generation</p>
+        <h2 class="section-title" style="margin-bottom:18px;">Stop waiting for<br>customers to find you.</h2>
+        <p class="section-sub" style="margin-bottom:28px;">
+          We combine automated email campaigns with targeted local lead generation so your pipeline never runs dry. Our AI writes the emails, finds the leads, and tracks what converts.
+        </p>
+        <div id="emailFeatureList"><!-- populated by JS --></div>
+      </div>
+
+      <!-- Email Mock -->
+      <div>
+        <div class="email-mock">
+          <div class="email-mock-bar">
+            <div class="dot-r"></div><div class="dot-r"></div><div class="dot-r"></div>
+            <span class="email-mock-label">AI-Generated Email Preview</span>
+          </div>
+          <div class="email-mock-body">
+            <p class="email-label">Subject</p>
+            <p class="email-subject">Hey Maria — still thinking about that roof?</p>
+            <hr class="email-divider" />
+            <div class="email-body">
+              Hi Maria,<br><br>
+              I wanted to follow up on your inquiry from last week. We had a couple cancellations and have an opening this Thursday at 2pm — would that work for a free estimate?<br><br>
+              No pressure at all. Just wanted to make sure you got taken care of before the rain season hits.<br><br>
+              — Mike at Valley Roofing
+            </div>
+            <a href="#waitlist" class="email-cta">Book My Free Estimate →</a>
+          </div>
+        </div>
+        <p class="email-mock-note" style="margin-top:10px;">Written by AI · Sounds like you · Sent automatically</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS STRIP ─── -->
+<section class="stats-strip">
+  <div class="container stats-inner">
+    <p class="eyebrow stats-eyebrow">The Core Difference</p>
+    <h2 class="section-title stats-title">
+      Our AI doesn't sound like a bot.<br>
+      <span class="muted">It sounds like your best employee.</span>
+    </h2>
+    <p class="stats-sub">
+      Anyone can script a chatbot. We built something different — an AI trained on how real local business owners talk to customers. It's warm, direct, and gets things done. Customers don't know it's AI. They just know they got helped.
+    </p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <p class="stat-number">&lt; 2s</p>
+        <p class="stat-label">Average response time</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-number">94%</p>
+        <p class="stat-label">Caller satisfaction rate</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-number">3×</p>
+        <p class="stat-label">More leads captured vs voicemail</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICING ─── -->
+<section class="pricing section" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <p class="eyebrow">Pricing</p>
+      <h2 class="section-title">Simple. No surprises.</h2>
+      <p class="section-sub">Cancel anytime. No contracts. Start free for 14 days.</p>
+    </div>
+    <div class="pricing-grid" id="pricingGrid"><!-- populated by JS --></div>
+  </div>
+</section>
+
+<!-- ─── WAITLIST CTA ─── -->
+<section class="cta-section" id="waitlist">
+  <div class="cta-inner">
+    <h2 class="section-title cta-title">Ready to stop<br>missing customers?</h2>
+    <p class="cta-sub">
+      Join local businesses already using Fugth Management to recover revenue, get more leads, and let AI handle the work.
+    </p>
+    <div id="ctaArea">
+      <form class="cta-form" id="waitlistForm">
+        <input type="email" required placeholder="your@email.com" class="cta-input" id="emailInput" />
+        <button type="submit" class="btn btn-primary">Get Early Access</button>
+      </form>
+      <p class="hero-note" style="margin-top:12px;">No credit card required · Instant setup</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div class="logo-mark" style="width:26px;height:26px;font-size:11px;">F</div>
+          <span class="footer-brand-name">FUGTH MANAGEMENT</span>
+        </div>
+        <p class="footer-tagline">Operational intelligence for local business.</p>
+      </div>
+      <div>
+        <p class="footer-col-title">Product</p>
+        <div class="footer-links">
+          <a href="#features" class="footer-link">Features</a>
+          <a href="#pricing"  class="footer-link">Pricing</a>
+          <a href="#email-leads" class="footer-link">Email &amp; Leads</a>
+          <a href="#services" class="footer-link">AI Consultant</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title">Company</p>
+        <div class="footer-links">
+          <a href="#" class="footer-link">About</a>
+          <a href="#waitlist" class="footer-link">Contact</a>
+          <a href="#" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">Careers</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title">Legal</p>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+          <a href="#" class="footer-link">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2026 Fugth Management LLC. All rights reserved.</p>
+      <div class="footer-badges">
+        <span class="footer-badge">SOC 2 Type II</span>
+        <span class="footer-badge">GDPR Ready</span>
+        <span class="footer-badge">256-bit SSL</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── SCRIPTS ─── -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── Data ── */
+  const FEATURES = [
+    { icon: '🎙️', title: 'AI Call Answering',    badge: 'Most Popular', desc: 'Our AI picks up every call, answers questions, books appointments, and captures lead info — in a natural, conversational tone customers can\'t distinguish from a real person.' },
+    { icon: '✉️', title: 'Smart Email Automation', badge: null,          desc: 'Follow-up emails, appointment reminders, review requests, and re-engagement campaigns — all written in your voice and sent at exactly the right moment.' },
+    { icon: '📍', title: 'Lead Generation',        badge: 'New',         desc: 'We find businesses and homeowners in your area actively looking for your services and deliver them straight to your inbox, pre-qualified and ready to convert.' },
+    { icon: '⭐', title: 'Reputation Defense',     badge: null,          desc: 'Monitor every review across Google, Yelp, and Facebook. AI-drafted responses go out within minutes — turning negative reviews into reputation wins.' },
+    { icon: '🤖', title: 'Executive AI Consultant',badge: null,          desc: 'Ask your AI anything about your business. Trained on your own data, it surfaces insights on pricing, operations, and customer trends on demand.' },
+    { icon: '📊', title: 'Unified Dashboard',      badge: null,          desc: 'Every call, email, lead, and review in one clean interface. Know exactly what\'s happening in your business at any moment.' },
+  ];
+
+  const SERVICES = [
+    {
+      num: '01', title: 'Revenue Recovery', subtitle: 'AI Call Handling',
+      desc: 'Every missed call is a missed paycheck. Our AI answers instantly, qualifies the caller, books the appointment, and sends a follow-up — so you recover revenue even while you sleep.',
+      details: ['24/7 call answering', 'Appointment booking', 'Lead qualification', 'SMS & voicemail follow-up'],
+    },
+    {
+      num: '02', title: 'Digital Reputation Defender', subtitle: 'Review & Rating Management',
+      desc: 'Your online reputation is your most valuable asset. We monitor every platform, respond to reviews in your voice within minutes, and run proactive campaigns to collect 5-star reviews from happy customers.',
+      details: ['Google, Yelp & Facebook monitoring', 'AI-drafted responses', 'Review request campaigns', 'Sentiment analysis'],
+    },
+    {
+      num: '03', title: 'Executive AI Consultant', subtitle: 'RAG-Powered Business Intelligence',
+      desc: 'An AI advisor that knows your business inside out. Upload your documents, FAQs, pricing, and history — then ask it anything. It answers like a seasoned business consultant, not a chatbot.',
+      details: ['Custom knowledge base', 'Natural language answers', 'Pricing & ops insights', 'Customer trend reports'],
+    },
+  ];
+
+  const EMAIL_FEATURES = [
+    { icon: '📧', title: 'Email Campaigns',    desc: 'AI-written sequences in your brand voice — onboarding, re-engagement, seasonal offers.' },
+    { icon: '🗺️', title: 'Local Lead Scraping', desc: 'We find businesses and homeowners in any zip code who need your services right now.' },
+    { icon: '🔁', title: 'Automated Follow-Up', desc: 'Every lead gets a personalized follow-up sequence until they convert or opt out.' },
+  ];
+
+  const PLANS = [
+    {
+      name: 'Starter', price: '$49', per: '/mo', desc: 'Perfect for getting started', highlight: false,
+      features: ['AI call answering (500 calls/mo)', 'Email follow-up sequences', 'Google review monitoring', 'Lead inbox (25 leads/mo)', 'Basic dashboard'],
+      cta: 'Start Free Trial',
+    },
+    {
+      name: 'Growth', price: '$129', per: '/mo', desc: 'Most popular for growing businesses', highlight: true,
+      features: ['Unlimited AI call answering', 'Full email automation suite', 'Reputation management', 'Lead generation (150/mo)', 'AI Consultant chat', 'Priority support'],
+      cta: 'Start Free Trial',
+    },
+    {
+      name: 'Enterprise', price: '$299', per: '/mo', desc: 'Built for multi-location operations', highlight: false,
+      features: ['Everything in Growth', 'Unlimited locations', 'Custom AI training', 'Dedicated account manager', 'API access', 'SLA guarantee'],
+      cta: 'Talk to Sales',
+    },
+  ];
+
+  const CHAT_SCRIPT = [
+    { from: 'caller', text: 'Hi, are you guys open on Saturdays? I need an estimate.' },
+    { from: 'ai',     text: "Absolutely! We're open Saturday 9am–3pm. I'd love to get you scheduled — what service do you need an estimate for?" },
+    { from: 'caller', text: 'Roof repair, maybe 1,500 sq ft.' },
+    { from: 'ai',     text: "Perfect. I can book you for a free on-site estimate this Saturday at 10am. Can I get your name and best callback number?" },
+  ];
+
+  /* ── Render Features ── */
+  const fg = document.getElementById('featureGrid');
+  FEATURES.forEach(f => {
+    const el = document.createElement('div');
+    el.className = 'feature-card';
+    el.innerHTML = `
+      <div class="feature-card-top">
+        <span class="feature-icon">${f.icon}</span>
+        ${f.badge ? `<span class="feature-badge">${f.badge}</span>` : ''}
+      </div>
+      <p class="feature-title">${f.title}</p>
+      <p class="feature-desc">${f.desc}</p>
+    `;
+    fg.appendChild(el);
+  });
+
+  /* ── Render Services ── */
+  const sl = document.getElementById('serviceList');
+  SERVICES.forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'service-card';
+    el.innerHTML = `
+      <div class="service-inner">
+        <div>
+          <div class="service-meta">
+            <span class="service-num">${s.num}</span>
+            <span class="service-rule"></span>
+            <span class="service-subtitle">${s.subtitle}</span>
+          </div>
+          <h3 class="service-title">${s.title}</h3>
+          <p class="service-desc">${s.desc}</p>
+        </div>
+        <div class="service-details">
+          ${s.details.map(d => `
+            <div class="check-item">
+              <span class="check-icon">✓</span>
+              <span>${d}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    sl.appendChild(el);
+  });
+
+  /* ── Render Email Features ── */
+  const efl = document.getElementById('emailFeatureList');
+  EMAIL_FEATURES.forEach(f => {
+    const el = document.createElement('div');
+    el.className = 'feature-list-item';
+    el.innerHTML = `
+      <span class="feature-list-icon">${f.icon}</span>
+      <div>
+        <p class="feature-list-title">${f.title}</p>
+        <p class="feature-list-desc">${f.desc}</p>
+      </div>
+    `;
+    efl.appendChild(el);
+  });
+
+  /* ── Render Pricing ── */
+  const pg = document.getElementById('pricingGrid');
+  PLANS.forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'price-card' + (p.highlight ? ' highlight' : '');
+    el.innerHTML = `
+      ${p.highlight ? '<span class="popular-badge">Most Popular</span>' : ''}
+      <p class="plan-name">${p.name}</p>
+      <div class="plan-price">
+        <span class="plan-amount">${p.price}</span>
+        <span class="plan-per">${p.per}</span>
+      </div>
+      <p class="plan-desc">${p.desc}</p>
+      <ul class="plan-features">
+        ${p.features.map(f => `
+          <li class="plan-feature">
+            <span class="plan-check">✓</span>
+            <span class="plan-feature-text">${f}</span>
+          </li>
+        `).join('')}
+      </ul>
+      <button class="plan-btn" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">${p.cta}</button>
+    `;
+    pg.appendChild(el);
+  });
+
+  /* ── Animated Chat ── */
+  const chatEl = document.getElementById('chatMessages');
+  let msgIdx = 0;
+  function appendMsg(msg) {
+    const div = document.createElement('div');
+    div.className = 'msg ' + msg.from;
+    div.innerHTML = `<div class="msg-bubble">${msg.text}</div>`;
+    div.style.opacity = '0';
+    div.style.transform = 'translateY(8px)';
+    div.style.transition = 'opacity .35s ease, transform .35s ease';
+    chatEl.appendChild(div);
+    requestAnimationFrame(() => {
+      div.style.opacity = '1';
+      div.style.transform = 'translateY(0)';
+    });
+  }
+  function showTyping() {
+    const div = document.createElement('div');
+    div.className = 'msg ai';
+    div.id = 'typingIndicator';
+    div.innerHTML = `<div class="msg-bubble typing"><span></span><span></span><span></span></div>`;
+    chatEl.appendChild(div);
+  }
+  function removeTyping() {
+    const t = document.getElementById('typingIndicator');
+    if (t) t.remove();
+  }
+  function nextMsg() {
+    if (msgIdx >= CHAT_SCRIPT.length) {
+      setTimeout(() => {
+        chatEl.innerHTML = '';
+        msgIdx = 0;
+        nextMsg();
+      }, 4000);
+      return;
+    }
+    const msg = CHAT_SCRIPT[msgIdx++];
+    if (msg.from === 'ai') {
+      showTyping();
+      setTimeout(() => {
+        removeTyping();
+        appendMsg(msg);
+        setTimeout(nextMsg, 1800);
+      }, 1200);
+    } else {
+      appendMsg(msg);
+      setTimeout(nextMsg, 1600);
+    }
+  }
+  setTimeout(nextMsg, 800);
+
+  /* ── Hamburger ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  mobileMenu.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  /* ── Active nav link on scroll ── */
+  const sections = ['home','features','services','email-leads','pricing'];
+  const navLinks = document.querySelectorAll('.nav-link[data-section]');
+  function updateNav() {
+    let current = 'home';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 100) current = id;
+    });
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.dataset.section === current);
+    });
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+
+  /* ── Waitlist form ── */
+  document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    if (!email) return;
+    document.getElementById('ctaArea').innerHTML = `
+      <div class="cta-success">
+        ✅ You're on the list! We'll be in touch shortly.
+      </div>
+    `;
+  });
+
+  /* ── Intersection Observer for fade-up on feature cards ── */
+  if ('IntersectionObserver' in window) {
+    const cards = document.querySelectorAll('.feature-card, .service-card, .stat-card, .price-card');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    cards.forEach(c => {
+      c.style.opacity = '0';
+      c.style.transform = 'translateY(18px)';
+      c.style.transition = 'opacity .45s ease, transform .45s ease';
+      obs.observe(c);
+    });
+  }
+})();
+</script>
+</body>
+</html>
